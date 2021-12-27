@@ -30,9 +30,9 @@ def to_tensor(arr):
 
 
 def to_array(tensor):
-    if tensor.ndimension() <= 4:
+    if tensor.ndim <= 4:
         arr = tensor.numpy()
-        if tensor.ndimension() in (3, 4):
+        if tensor.ndim in (3, 4):
             arr = np.moveaxis(arr, -3, -1)
         return arr
     else:

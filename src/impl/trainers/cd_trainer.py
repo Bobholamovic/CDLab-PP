@@ -74,7 +74,7 @@ class CDTrainer(Trainer):
                 pred = paddle.nn.functional.log_softmax(pred, axis=1)
             else:
                 pred = pred.squeeze(1)
-                tar = tar.cast('float32')
+                tar = tar.astype('float32')
             
             loss = self.criterion(pred, tar)
             
@@ -98,7 +98,7 @@ class CDTrainer(Trainer):
                     t2 = to_array(t2.detach()[0])
                     self.vdl_writer.add_image("Train/t1_picked", t1, self.train_step, dataformats='HWC')
                     self.vdl_writer.add_image("Train/t2_picked", t2, self.train_step, dataformats='HWC')
-                    self.vdl_writer.add_image("Train/labels_picked", tar[0].unsqueeze(0), self.train_step)
+                    self.vdl_writer.add_image("Train/labels_picked", to_array(tar[0]), self.train_step, dataformats='HW')
                     self.vdl_writer.flush()
                 self.train_step += 1
         
@@ -122,10 +122,10 @@ class CDTrainer(Trainer):
             for i, (name, t1, t2, tar) in enumerate(pb):
                 pred = self.model(t1, t2)
                 if self.use_argmax:
-                    pred = paddle.nn.functional.log_softmax(pred, dim=1)
+                    pred = paddle.nn.functional.log_softmax(pred, axis=1)
                 else:
                     pred = pred.squeeze(1)
-                    tar = tar.cast('float32')
+                    tar = tar.astype('float32')
 
                 loss = self.criterion(pred, tar)
                 losses.update(loss.item())

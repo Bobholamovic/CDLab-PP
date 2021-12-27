@@ -83,7 +83,7 @@ class PostProcessor:
         if self.out_ch == 1:
             return to_array(paddle.nn.functional.sigmoid(pred)[0,0])
         elif self.out_ch == 2:
-            return to_array(paddle.nn.functional.softmax(pred, dim=1)[0,1])
+            return to_array(paddle.nn.functional.softmax(pred, axis=1)[0,1])
         else:
             raise ValueError
 
