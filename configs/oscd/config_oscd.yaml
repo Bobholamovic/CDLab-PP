@@ -39,8 +39,8 @@ debug_on: False
 inherit_off: False
 log_off: False
 track_intvl: 10
-tb_on: False
-tb_intvl: 15
+vdl_on: False
+vdl_intvl: 15
 suffix_off: True
 save_on: False
 out_dir: ''
