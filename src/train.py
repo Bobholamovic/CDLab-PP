@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import logging
-from re import L
 import shutil
 import random
 import os.path as osp

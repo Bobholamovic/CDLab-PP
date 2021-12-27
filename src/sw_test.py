@@ -139,7 +139,7 @@ def main():
     
     args = parse_args(parser_configurator)
     
-    logging.getLogger('paddle').setLevel(logging.WARN)
+    logging.root.handlers.clear()
     logger = R['Logger']
 
     paddle.set_device(args['device'])
