@@ -59,8 +59,7 @@ class MaxUnPool2x2(nn.MaxUnPool2D):
 
 class ConvTransposed3x3(nn.Layer):
     def __init__(
-        self, in_ch, out_ch, 
-        pad_mode='constant', 
+        self, in_ch, out_ch,
         bias='auto', norm=None, act=None, 
         **kwargs
     ):
