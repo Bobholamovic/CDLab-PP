@@ -60,16 +60,14 @@ class MaxUnPool2x2(nn.MaxUnPool2D):
 class ConvTransposed3x3(nn.Layer):
     def __init__(
         self, in_ch, out_ch, 
-        kernel, pad_mode='constant', 
+        pad_mode='constant', 
         bias='auto', norm=None, act=None, 
         **kwargs
     ):
         super().__init__()
         seq = []
-        if kernel >= 2:
-            seq.append(nn.Pad2D(kernel//2, mode=pad_mode))
         seq.append(
-            nn.Conv2D(
+            nn.Conv2DTranspose(
                 in_ch, out_ch, 3,
                 stride=2, padding=1,
                 bias_attr=(False if norm else None) if bias=='auto' else bias,
