@@ -37,8 +37,7 @@ class Trainer(metaclass=ABCMeta):
         )
         self.path = self.gpc.get_path
         
-        for k, v in sorted(settings.items()):
-            self.logger.show("{}: {}".format(k,v))
+        self.logger.show(self._format_options(settings))
 
         self.model = model_factory(model, settings)
         self.criterion = critn_factory(criterion, settings)
@@ -226,6 +225,28 @@ class Trainer(metaclass=ABCMeta):
                     suffix=True
                 )
             )
+
+    def _format_options(self, options, indent=0):
+        s = ''
+        if isinstance(options, dict):
+            for i, (k, v) in enumerate(sorted(options.items())):
+                s += ' '*indent+str(k)+': '
+                if isinstance(v, (dict,list,tuple)):
+                    s += '\n'+self._format_options(v, indent=indent+1)
+                else:
+                    s += str(v)
+                if i != len(options)-1:
+                    s += '\n'
+        elif isinstance(options, (list, tuple)):
+            for i, v in enumerate(options):
+                s += ' '*indent+'- '
+                if isinstance(v, (dict,list,tuple)):
+                    s += '\n'+self._format_options(v, indent=indent+1)
+                else:
+                    s += str(v)
+                if i != len(options)-1:
+                    s += '\n'
+        return s
 
 
 class TrainerSwitcher:
