@@ -47,10 +47,8 @@ class HookHelper:
             if isinstance(entry, tuple):
                 for key, f in zip(entry, x):
                     self.out_dict[key] = f.detach().clone()
-            elif isinstance(entry, paddle.Tensor):
-                self.out_dict[entry] = x.detach().clone()
             else:
-                raise NotImplementedError
+                self.out_dict[entry] = x.detach().clone()
 
         if self.hook_type == 'forward_in':
             # NOTE: Register forward hooks for LAYERs
@@ -66,7 +64,7 @@ class HookHelper:
                     )
         elif self.hook_type == 'forward_out':
             # NOTE: Register forward hooks for LAYERs.
-            for name, module in self.model.named_modules():
+            for name, module in self.model.named_sublayers():
                 if name in self.fetch_dict:
                     entry = self.fetch_dict[name]
                     self._handles.append(

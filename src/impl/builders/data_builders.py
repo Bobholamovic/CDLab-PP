@@ -4,6 +4,7 @@ import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
 import paddle.io as io
+import numpy as np
 
 import constants
 from utils.data_utils.augmentations import *
@@ -26,7 +27,7 @@ def build_ac_szada_train_dataset(C):
                 Rotate('90'), Rotate('180'), Rotate('270'),
                 Shift(),
             )
-        ), Normalize(0.0, 255.0), None),
+        ), Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_AIRCHANGE
     ))
 
@@ -47,7 +48,7 @@ def build_ac_szada_train_dataset(C):
 def build_ac_szada_eval_dataset(C):
     configs = get_common_eval_configs(C)
     configs.update(dict(
-        transforms=(None, Normalize(0.0, 255.0), None),
+        transforms=(None, Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_AIRCHANGE
     ))
 
@@ -73,7 +74,7 @@ def build_ac_tiszadob_train_dataset(C):
                 Rotate('90'), Rotate('180'), Rotate('270'),
                 Shift(),
             )
-        ), Normalize(0.0, 255.0), None),
+        ), Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_AIRCHANGE
     ))
 
@@ -94,7 +95,7 @@ def build_ac_tiszadob_train_dataset(C):
 def build_ac_tiszadob_eval_dataset(C):
     configs = get_common_eval_configs(C)
     configs.update(dict(
-        transforms=(None, Normalize(0.0, 255.0), None),
+        transforms=(None, Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_AIRCHANGE
     ))
 
@@ -163,7 +164,7 @@ def build_svcd_train_dataset(C):
             Rotate('90'), Rotate('180'), Rotate('270'),
             Shift(), 
             Identity()),
-        ), Normalize(0.0, 255.0), None),
+        ), Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_SVCD,
         sets=('real',)
     ))
@@ -178,7 +179,7 @@ def build_svcd_eval_dataset(C):
     configs.update(dict(
         transforms=(
         None,    
-        Normalize(0.0, 255.0), None),
+        Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_SVCD,
         sets=('real',)
     ))
@@ -195,7 +196,7 @@ def build_levircd_train_dataset(C):
             HorizontalFlip(), VerticalFlip(), 
             Rotate('90'), Rotate('180'), Rotate('270'),
             Shift(), 
-            Identity()), Normalize(0.0, 255.0), None),
+            Identity()), Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_LEVIRCD,
     ))
 
@@ -207,7 +208,7 @@ def build_levircd_train_dataset(C):
 def build_levircd_eval_dataset(C):
     configs = get_common_eval_configs(C)
     configs.update(dict(
-        transforms=(None, Normalize(0.0, 255.0), None),
+        transforms=(None, Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_LEVIRCD,
     ))
 
@@ -223,7 +224,7 @@ def build_whu_train_dataset(C):
             HorizontalFlip(), VerticalFlip(), 
             Rotate('90'), Rotate('180'), Rotate('270'),
             Shift(), 
-            Identity()), Normalize(0.0, 255.0), None),
+            Identity()), Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_WHU,
     ))
 
@@ -235,7 +236,7 @@ def build_whu_train_dataset(C):
 def build_whu_eval_dataset(C):
     configs = get_common_eval_configs(C)
     configs.update(dict(
-        transforms=(None, Normalize(0.0, 255.0), None),
+        transforms=(None, Normalize(np.asarray(C['mu']), np.asarray(C['sigma'])), None),
         root=constants.IMDB_WHU,
     ))
 

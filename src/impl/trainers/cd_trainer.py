@@ -2,6 +2,7 @@ import os
 import os.path as osp
 
 import paddle
+import numpy as np
 from visualdl import LogWriter
 from skimage import io
 from tqdm import tqdm
@@ -9,19 +10,20 @@ from tqdm import tqdm
 from core.trainer import Trainer
 from utils.data_utils.misc import (
     to_array, to_pseudo_color,
-    quantize_8bit as quantize
+    normalize_minmax, normalize_8bit,
+    quantize_8bit as quantize,
 )
-from utils.utils import HookHelper
+from utils.utils import HookHelper, FeatureContainer
 from utils.metrics import (Meter, Precision, Recall, Accuracy, F1Score)
 
 
 class CDTrainer(Trainer):
     def __init__(self, settings):
         super().__init__(settings['model'], settings['dataset'], settings['criterion'], settings['optimizer'], settings)
-
+        
+        # Set up visualdl
         self.vdl_on = (hasattr(self.logger, 'log_path') or self.debug) and self.ctx['vdl_on']
         if self.vdl_on:
-            # Initialize visualdl
             if hasattr(self.logger, 'log_path'):
                 vdl_dir = self.path(
                     'log', 
@@ -57,6 +59,8 @@ class CDTrainer(Trainer):
 
         self.use_argmax = self.ctx['argmax_on']
 
+        self._init_trainer()
+
     def train_epoch(self, epoch):
         losses = Meter()
         len_train = len(self.train_loader)
@@ -67,17 +71,19 @@ class CDTrainer(Trainer):
         self.model.train()
         
         for i, (t1, t2, tar) in enumerate(pb):
+            t1, t2, tar = self._prepare_data(t1, t2, tar)
+
             show_imgs_on_vdl = self.vdl_on and (i%self.vdl_intvl == 0)
             
-            pred = self.model(t1, t2)
-            if self.use_argmax:
-                pred = paddle.nn.functional.log_softmax(pred, axis=1)
-            else:
-                pred = pred.squeeze(1)
-                tar = tar.astype('float32')
+            fetch_dict = self._set_fetch_dict()
+            out_dict = FeatureContainer()
+
+            with HookHelper(self.model, fetch_dict, out_dict, hook_type='forward_out'):
+                out = self.model(t1, t2)
+
+            pred = self._process_model_out(out)
             
             loss = self.criterion(pred, tar)
-            
             losses.update(loss.item(), n=self.batch_size)
 
             self.optimizer.clear_grad()
@@ -92,17 +98,22 @@ class CDTrainer(Trainer):
 
             if self.vdl_on:
                 # Write to tensorboard
-                self.vdl_writer.add_scalar("Train/loss", losses.val, self.train_step)
+                self.vdl_writer.add_scalar("Train/running_loss", losses.val, self.train_step)
                 if show_imgs_on_vdl:
-                    t1 = to_array(t1.detach()[0])
-                    t2 = to_array(t2.detach()[0])
-                    self.vdl_writer.add_image("Train/t1_picked", t1, self.train_step, dataformats='HWC')
-                    self.vdl_writer.add_image("Train/t2_picked", t2, self.train_step, dataformats='HWC')
+                    t1 = self._denorm_image(to_array(t1.detach()[0]))
+                    t2 = self._denorm_image(to_array(t2.detach()[0]))
+                    self.vdl_writer.add_image("Train/t1_picked", normalize_8bit(t1), self.train_step, dataformats='HWC')
+                    self.vdl_writer.add_image("Train/t2_picked", normalize_8bit(t2), self.train_step, dataformats='HWC')
                     self.vdl_writer.add_image("Train/labels_picked", to_array(tar[0]), self.train_step, dataformats='HW')
+                    for key, feats in out_dict.items():
+                        for idx, feat in enumerate(feats):
+                            feat = self._process_fetched_feat(feat)
+                            self.vdl_writer.add_image(f"Train/{key}_{idx}", feat, self.train_step)
                     self.vdl_writer.flush()
                 self.train_step += 1
         
         if self.vdl_on:
+            self.vdl_writer.add_scalar("Train/loss", losses.avg, self.train_step)
             self.vdl_writer.add_scalar("Train/lr", self.lr, self.train_step)
 
     def evaluate_epoch(self, epoch):
@@ -120,21 +131,23 @@ class CDTrainer(Trainer):
 
         with paddle.no_grad():
             for i, (name, t1, t2, tar) in enumerate(pb):
-                pred = self.model(t1, t2)
-                if self.use_argmax:
-                    pred = paddle.nn.functional.log_softmax(pred, axis=1)
-                else:
-                    pred = pred.squeeze(1)
-                    tar = tar.astype('float32')
+                t1, t2, tar = self._prepare_data(t1, t2, tar)
+
+                fetch_dict = self._set_fetch_dict()
+                out_dict = FeatureContainer()
+
+                with HookHelper(self.model, fetch_dict, out_dict, hook_type='forward_out'):
+                    out = self.model(t1, t2)
+
+                pred = self._process_model_out(out)
 
                 loss = self.criterion(pred, tar)
                 losses.update(loss.item())
 
                 # Convert to numpy arrays
-                if self.use_argmax:
-                    cm = to_array(paddle.argmax(pred[0], 0)).astype('uint8')
-                else:
-                    cm = to_array(paddle.nn.functional.sigmoid(pred[0] > 0.5)).astype('uint8')
+                prob = self._pred_to_prob(pred)
+                prob = to_array(prob[0])
+                cm = (prob>0.5).astype('uint8')
                 tar = to_array(tar[0]).astype('uint8')
 
                 for m in metrics:
@@ -151,17 +164,17 @@ class CDTrainer(Trainer):
 
                 if self.vdl_on:
                     if dump:
-                        t1 = to_array(t1[0])
-                        t2 = to_array(t2[0])
-                        self.vdl_writer.add_image("Eval/t1", t1, self.eval_step, dataformats='HWC')
-                        self.vdl_writer.add_image("Eval/t2", t2, self.eval_step, dataformats='HWC')
+                        t1 = self._denorm_image(to_array(t1[0]))
+                        t2 = self._denorm_image(to_array(t2[0]))
+                        self.vdl_writer.add_image("Eval/t1", normalize_8bit(t1), self.eval_step, dataformats='HWC')
+                        self.vdl_writer.add_image("Eval/t2", normalize_8bit(t2), self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/labels", quantize(tar), self.eval_step, dataformats='HW')
-                        if self.use_argmax:
-                            prob = quantize(to_array(paddle.exp(pred[0,1])))
-                        else:
-                            prob = to_array(paddle.nn.functional.sigmoid(pred[0]))
                         self.vdl_writer.add_image("Eval/prob", to_pseudo_color(prob), self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/cm", quantize(cm), self.eval_step, dataformats='HW')
+                        for key, feats in out_dict.items():
+                            for idx, feat in enumerate(feats):
+                                feat = self._process_fetched_feat(feat)
+                                self.vdl_writer.add_image(f"Train/{key}_{idx}", feat, self.eval_step)
                     self.eval_step += 1
                 
                 if self.save:
@@ -188,3 +201,27 @@ class CDTrainer(Trainer):
             underline=True
         )
         return io.imsave(out_path, image)
+
+    def _denorm_image(self, x):
+        return x*np.asarray(self.ctx['sigma']) + np.asarray(self.ctx['mu'])
+
+    def _process_fetched_feat(self, feat):
+        feat = normalize_minmax(feat.mean(1))
+        feat = quantize(to_array(feat[0]))
+        feat = to_pseudo_color(feat)
+        return feat
+
+    def _init_trainer(self):
+        pass
+
+    def _prepare_data(self, t1, t2, tar):
+        return t1, t2, tar
+
+    def _set_fetch_dict(self):
+        return dict()
+
+    def _process_model_out(self, out):
+        return out
+
+    def _pred_to_prob(self, pred):
+        return paddle.nn.functional.sigmoid(pred)

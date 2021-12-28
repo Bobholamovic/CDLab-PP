@@ -140,7 +140,8 @@ class Trainer(metaclass=ABCMeta):
                     scheduler.step(acc)
                 else:
                     scheduler.step()
-            return self.schedulers[0]()
+            self.lr = self.schedulers[0]()
+            return self.lr
         else:
             return self.lr
 

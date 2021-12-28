@@ -12,24 +12,24 @@ class CDNet(nn.Module):
     def __init__(self, in_ch, out_ch):
         super().__init__()
 
-        self.conv1 = Conv7x7(in_ch, 64, bn=True, act=True)
+        self.conv1 = Conv7x7(in_ch, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.pool1 = MaxPool2x2(return_mask=True)
-        self.conv2 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv2 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.pool2 = MaxPool2x2(return_mask=True)
-        self.conv3 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv3 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.pool3 = MaxPool2x2(return_mask=True)
-        self.conv4 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv4 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.pool4 = MaxPool2x2(return_mask=True)
-        self.conv5 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv5 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.upool4 = MaxUnPool2x2()
-        self.conv6 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv6 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.upool3 = MaxUnPool2x2()
-        self.conv7 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv7 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.upool2 = MaxUnPool2x2()
-        self.conv8 = Conv7x7(64, 64, bn=True, act=True)
+        self.conv8 = Conv7x7(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.upool1 = MaxUnPool2x2()
         
-        self.conv_out = Conv7x7(64, out_ch, bn=False, act=False)
+        self.conv_out = Conv7x7(64, out_ch, norm=False, act=False)
     
     def forward(self, t1, t2):
         # Concatenation

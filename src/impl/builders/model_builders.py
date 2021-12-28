@@ -43,3 +43,9 @@ def build_siamunet_conc_oscd_model(C):
 def build_cdnet_model(C):
     from models.cdnet import CDNet
     return CDNet(6, 2)
+
+
+@MODELS.register_func('IFN_model')
+def build_ifn_model(C):
+    from models.ifn import DSIFN
+    return DSIFN()

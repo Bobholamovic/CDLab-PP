@@ -1,6 +1,5 @@
 # Implementation of
 # Daudt, R. C., Le Saux, B., & Boulch, A. "Fully convolutional siamese networks for change detection". In 2018 25th IEEE International Conference on Image Processing (ICIP) (pp. 4063-4067). IEEE.
-# with modifications (remove dropout layers, add residual connections, double number of channels, and change decoding blocks).
 
 # Transferred from https://github.com/rcdaudt/fully_convolutional_change_detection/blob/master/siamunet_diff.py
 
@@ -20,44 +19,44 @@ class SiamUnet_diff(nn.Layer):
     def __init__(self, in_ch, out_ch):
         super().__init__()
 
-        self.conv11 = Conv3x3(in_ch, 16, bn=True, act=True)
-        self.conv12 = Conv3x3(16, 16, bn=True, act=True)
+        self.conv11 = Conv3x3(in_ch, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
+        self.conv12 = Conv3x3(16, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
         self.pool1 = MaxPool2x2()
 
-        self.conv21 = Conv3x3(16, 32, bn=True, act=True)
-        self.conv22 = Conv3x3(32, 32, bn=True, act=True)
+        self.conv21 = Conv3x3(16, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
+        self.conv22 = Conv3x3(32, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
         self.pool2 = MaxPool2x2()
 
-        self.conv31 = Conv3x3(32, 64, bn=True, act=True)
-        self.conv32 = Conv3x3(64, 64, bn=True, act=True)
-        self.conv33 = Conv3x3(64, 64, bn=True, act=True)
+        self.conv31 = Conv3x3(32, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv32 = Conv3x3(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv33 = Conv3x3(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
         self.pool3 = MaxPool2x2()
 
-        self.conv41 = Conv3x3(64, 128, bn=True, act=True)
-        self.conv42 = Conv3x3(128, 128, bn=True, act=True)
-        self.conv43 = Conv3x3(128, 128, bn=True, act=True)
+        self.conv41 = Conv3x3(64, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv42 = Conv3x3(128, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv43 = Conv3x3(128, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
         self.pool4 = MaxPool2x2()
 
         self.upconv4 = ConvTransposed3x3(128, 128, output_padding=1)
 
-        self.conv43d = Conv3x3(256, 128, bn=True, act=True)
-        self.conv42d = Conv3x3(128, 128, bn=True, act=True)
-        self.conv41d = Conv3x3(128, 64, bn=True, act=True)
+        self.conv43d = Conv3x3(256, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv42d = Conv3x3(128, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv41d = Conv3x3(128, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
 
         self.upconv3 = ConvTransposed3x3(64, 64, output_padding=1)
 
-        self.conv33d = Conv3x3(128, 64, bn=True, act=True)
-        self.conv32d = Conv3x3(64, 64, bn=True, act=True)
-        self.conv31d = Conv3x3(64, 32, bn=True, act=True)
+        self.conv33d = Conv3x3(128, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv32d = Conv3x3(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv31d = Conv3x3(64, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
 
         self.upconv2 = ConvTransposed3x3(32, 32, output_padding=1)
 
-        self.conv22d = Conv3x3(64, 32, bn=True, act=True)
-        self.conv21d = Conv3x3(32, 16, bn=True, act=True)
+        self.conv22d = Conv3x3(64, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
+        self.conv21d = Conv3x3(32, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
 
         self.upconv1 = ConvTransposed3x3(16, 16, output_padding=1)
 
-        self.conv12d = Conv3x3(32, 16, bn=True, act=True)
+        self.conv12d = Conv3x3(32, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
         self.conv11d = Conv3x3(16, out_ch)
 
     def forward(self, t1, t2):
