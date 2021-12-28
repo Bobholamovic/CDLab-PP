@@ -1,7 +1,7 @@
 # Implementation of
 # C. Zhang et al., “A deeply supervised image fusion network for change detection in high resolution bi-temporal remote sensing images,” 2020, doi: 10.1016/J.ISPRSJPRS.2020.06.003.
 
-# Adapted from https://github.com/GeoZcx/A-deeply-supervised-image-fusion-network-for-change-detection-in-remote-sensing-images/blob/master/pytorch%20version/DSIFN.py
+# Transferred from https://github.com/GeoZcx/A-deeply-supervised-image-fusion-network-for-change-detection-in-remote-sensing-images/blob/master/pytorch%20version/DSIFN.py
 
 ## Original head information
 # credits: https://github.com/GeoZcx/A-deeply-supervised-image-fusion-network-for-change-detection-in-remote-sensing-images
@@ -11,7 +11,8 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle.vision.models import vgg16
 
-from ._blocks import BasicConv, Conv3x3, Conv7x7
+from ._blocks import Conv3x3
+from ._common import ChannelAttention, SpatialAttention
 
 
 class VGG16FeaturePicker(nn.Layer):
@@ -28,34 +29,6 @@ class VGG16FeaturePicker(nn.Layer):
             if idx in self.indices:
                 picked_feats.append(x)
         return picked_feats
-
-
-class ChannelAttention(nn.Layer):
-    def __init__(self, in_ch, ratio=8):
-        super().__init__()
-        self.avg_pool = nn.AdaptiveAvgPool2D(1)
-        self.max_pool = nn.AdaptiveMaxPool2D(1)
-        self.fc1 = BasicConv(in_ch, in_ch//ratio, 1, bias=False, act=nn.ReLU())
-        self.fc2 = BasicConv(in_ch//ratio, in_ch, 1, bias=False)
-
-    def forward(self,x):
-        avg_out = self.fc2(self.fc1(self.avg_pool(x)))
-        max_out = self.fc2(self.fc1(self.max_pool(x)))
-        out = avg_out + max_out
-        return F.sigmoid(out)
-
-
-class SpatialAttention(nn.Layer):
-    def __init__(self):
-        super().__init__()
-        self.conv = Conv7x7(2, 1, bias=False)
-
-    def forward(self, x):
-        avg_out = paddle.mean(x, axis=1, keepdim=True)
-        max_out = paddle.max(x, axis=1, keepdim=True)
-        x = paddle.concat([avg_out, max_out], axis=1)
-        x = self.conv(x)
-        return F.sigmoid(x)
 
 
 def conv2d_bn(in_ch, out_ch):

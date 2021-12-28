@@ -3,20 +3,23 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 
 
+__all__ = ['BasicConv', 'Conv1x1', 'Conv3x3', 'Conv7x7', 'MaxPool2x2', 'MaxUnPool2x2', 'ConvTransposed3x3']
+
+
 class BasicConv(nn.Layer):
     def __init__(
         self, in_ch, out_ch, 
-        kernel, pad_mode='constant', 
+        kernel_size, pad_mode='constant', 
         bias='auto', norm=None, act=None, 
         **kwargs
     ):
         super().__init__()
         seq = []
-        if kernel >= 2:
-            seq.append(nn.Pad2D(kernel//2, mode=pad_mode))
+        if kernel_size >= 2:
+            seq.append(nn.Pad2D(kernel_size//2, mode=pad_mode))
         seq.append(
             nn.Conv2D(
-                in_ch, out_ch, kernel,
+                in_ch, out_ch, kernel_size,
                 stride=1, padding=0,
                 bias_attr=(False if norm else None) if bias=='auto' else bias,
                 **kwargs
@@ -34,17 +37,17 @@ class BasicConv(nn.Layer):
 
 class Conv1x1(BasicConv):
     def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=None, act=None, **kwargs):
-        super().__init__(in_ch, out_ch, 1, pad_mode=pad_mode, norm=norm, act=act, **kwargs)
+        super().__init__(in_ch, out_ch, 1, pad_mode=pad_mode, bias=bias, norm=norm, act=act, **kwargs)
 
 
 class Conv3x3(BasicConv):
     def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=None, act=None, **kwargs):
-        super().__init__(in_ch, out_ch, 3, pad_mode=pad_mode, norm=norm, act=act, **kwargs)
+        super().__init__(in_ch, out_ch, 3, pad_mode=pad_mode, bias=bias, norm=norm, act=act, **kwargs)
 
 
 class Conv7x7(BasicConv):
     def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=None, act=None, **kwargs):
-        super().__init__(in_ch, out_ch, 7, pad_mode=pad_mode, norm=norm, act=act, **kwargs)
+        super().__init__(in_ch, out_ch, 7, pad_mode=pad_mode, bias=bias, norm=norm, act=act, **kwargs)
 
 
 class MaxPool2x2(nn.MaxPool2D):

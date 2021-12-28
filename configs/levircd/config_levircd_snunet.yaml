@@ -1,0 +1,10 @@
+# LEVIR-CD+SNUNet
+
+lr: 0.0008
+schedulers:
+  - name: StepDecay
+    learning_rate: 0.0008
+    step_size: 30
+    gamma: 0.2
+out_dir: snunet
+model: SNUNet

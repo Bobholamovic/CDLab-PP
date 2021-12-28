@@ -49,3 +49,9 @@ def build_cdnet_model(C):
 def build_ifn_model(C):
     from models.ifn import DSIFN
     return DSIFN()
+
+
+@MODELS.register_func('SNUNet_model')
+def build_snunet_model(C):
+    from models.snunet import SNUNet
+    return SNUNet(3, 2, 32)
