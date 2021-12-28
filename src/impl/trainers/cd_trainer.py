@@ -169,7 +169,7 @@ class CDTrainer(Trainer):
                         self.vdl_writer.add_image("Eval/t1", normalize_8bit(t1), self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/t2", normalize_8bit(t2), self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/labels", quantize(tar), self.eval_step, dataformats='HW')
-                        self.vdl_writer.add_image("Eval/prob", to_pseudo_color(prob), self.eval_step, dataformats='HWC')
+                        self.vdl_writer.add_image("Eval/prob", to_pseudo_color(quantize(prob)), self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/cm", quantize(cm), self.eval_step, dataformats='HW')
                         for key, feats in out_dict.items():
                             for idx, feat in enumerate(feats):
