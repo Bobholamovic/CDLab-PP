@@ -10,7 +10,6 @@ import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle.vision.models import vgg16
-from torchvision.models.vgg import VGG
 
 from ._blocks import BasicConv, Conv3x3, Conv7x7
 

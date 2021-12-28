@@ -8,7 +8,7 @@ import paddle.nn.functional as F
 from ._blocks import Conv7x7, MaxPool2x2, MaxUnPool2x2
 
 
-class CDNet(nn.Module):
+class CDNet(nn.Layer):
     def __init__(self, in_ch, out_ch):
         super().__init__()
 

@@ -46,7 +46,7 @@ class CDTrainer(Trainer):
                     for d in dirs:
                         os.rmdir(osp.join(root, d))
             self.vdl_writer = LogWriter(logdir=vdl_dir)
-            self.logger.show_nl("Tensorboard logdir: {}\n".format(osp.abspath(self.gpc.get_dir('vdl'))))
+            self.logger.show_nl("VisualDL logdir: {}\n".format(osp.abspath(self.gpc.get_dir('vdl'))))
             self.vdl_intvl = self.ctx['vdl_intvl']
             
             # Global steps
@@ -97,7 +97,7 @@ class CDTrainer(Trainer):
                 self.logger.dump(desc)
 
             if self.vdl_on:
-                # Write to tensorboard
+                # Write to visualdl
                 self.vdl_writer.add_scalar("Train/running_loss", losses.val, self.train_step)
                 if show_imgs_on_vdl:
                     t1 = self._denorm_image(to_array(t1.detach()[0]))
