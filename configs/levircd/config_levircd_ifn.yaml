@@ -11,6 +11,7 @@ sigma:
 out_dir: ifn
 criterion: WBCE+Dice
 model: IFN
+argmax_on: False
 
 mix_coeffs: 1.0
 cmb_coeffs: 1.0
