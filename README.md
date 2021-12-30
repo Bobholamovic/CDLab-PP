@@ -1,4 +1,4 @@
-# CDLab-PP
+# Change Detection Laboratory
 
 Developing and benchmarking deep learning-based remote sensing change detection methods using [PaddlePaddle](https://www.paddlepaddle.org.cn/).
 
@@ -77,7 +77,7 @@ SZTAKI AirChange Benchmark set: Szada set | `AC-Szada` | [website](http://web.ee
 SZTAKI AirChange Benchmark set: Tiszadob set | `AC-Tiszadob` | [website](http://web.eee.sztaki.hu/remotesensing/airchange_benchmark.html)
 Onera Satellite Change Detection dataset | `OSCD` | [website](https://rcdaudt.github.io/oscd/)
 Synthetic images and real season-varying remote sensing images | `SVCD` | [google drive](https://drive.google.com/file/d/1GX656JqqOyBi_Ef0w65kDGVto-nHrNs9)
-LEVIR building change detection dataset | `LEVIR-CD` | [website](https://justchenhao.github.io/LEVIR/)
+LEVIR building change detection dataset | `LEVIRCD` | [website](https://justchenhao.github.io/LEVIR/)
 WHU building change detection dataset | `WHU` | [website](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html)
 
 
