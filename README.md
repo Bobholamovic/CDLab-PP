@@ -1,14 +1,14 @@
 # CDLab-PP
 
-Developing and benchmarking remote sensing change detection methods using [PaddlePaddle](https://www.paddlepaddle.org.cn/).
+Developing and benchmarking deep learning-based remote sensing change detection methods using [PaddlePaddle](https://www.paddlepaddle.org.cn/).
 
 *CDLab also has a [PyTorch version](https://github.com/Bobholamovic/CDLab). Currently, this repo contains more model implementations, dataset interfaces, and configuration files.*
 
 ## Prerequisites
 
 > opencv-python==4.1.1  
-  paddlepaddle-gpu==2.2.0
-  visualdl==2.2.1
+  paddlepaddle-gpu==2.2.0  
+  visualdl==2.2.1  
   pyyaml==5.1.2  
   scikit-image==0.15.0  
   scikit-learn==0.21.3  
