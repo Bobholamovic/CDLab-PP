@@ -55,3 +55,9 @@ def build_ifn_model(C):
 def build_snunet_model(C):
     from models.snunet import SNUNet
     return SNUNet(3, 2, 32)
+
+
+@MODELS.register_func('STANet_model')
+def build_stanet_model(C):
+    from models.stanet import STANet
+    return STANet(**C['stanet_model'])

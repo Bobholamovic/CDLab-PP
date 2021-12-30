@@ -23,3 +23,9 @@ def build_weighted_bce_critn(C):
 def build_dice_critn(C):
     from utils.losses import DiceLoss
     return DiceLoss()
+
+
+@CRITNS.register_func('BC_critn')
+def build_bc_critn(C):
+    from utils.losses import BCLoss
+    return BCLoss(margin=2*C['threshold'])

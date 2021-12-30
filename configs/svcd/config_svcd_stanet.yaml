@@ -1,0 +1,12 @@
+# SVCD+STANet
+
+out_dir: stanet
+criterion: BC
+model: STANet
+
+stanet_model:
+  in_ch: 3
+  width: 64
+  att_type: PAM
+  ds: 1
+threshold: 1

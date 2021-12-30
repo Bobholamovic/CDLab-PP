@@ -45,3 +45,18 @@ class DiceLoss(nn.Layer):
         prob = F.sigmoid(pred)
         loss = 2. * (prob * tar).sum(1) / ((prob + tar).sum(1) + 1e-32)
         return 1 - loss.mean()
+
+
+class BCLoss(nn.Layer):
+    def __init__(self, margin=2.0):
+        super().__init__()
+        self.m = margin
+        self.eps = 1e-4
+
+    def forward(self, pred, tar):
+        utar = 1-tar
+        n_u = utar.sum() + self.eps
+        n_c = tar.sum() + self.eps
+        loss = 0.5*paddle.sum(utar*paddle.pow(pred, 2)) / n_u + \
+            0.5*paddle.sum(tar*paddle.pow(paddle.clip(self.m-pred, min=0.0), 2)) / n_c
+        return loss
