@@ -1,5 +1,5 @@
 # Implementation of 
-# [1]	S. Fang, K. Li, J. Shao, and Z. Li, “SNUNet-CD: A Densely Connected Siamese Network for Change Detection of VHR Images,” IEEE Geosci. Remote Sensing Lett., pp. 1–5, 2021, doi: 10.1109/LGRS.2021.3056416.
+# S. Fang, K. Li, J. Shao, and Z. Li, “SNUNet-CD: A Densely Connected Siamese Network for Change Detection of VHR Images,” IEEE Geosci. Remote Sensing Lett., pp. 1–5, 2021, doi: 10.1109/LGRS.2021.3056416.
 
 # Transferred from https://github.com/likyoo/Siam-NestedUNet/blob/master/models/Models.py
 
@@ -12,8 +12,9 @@ import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
 
-from ._blocks import BasicConv, Conv3x3, MaxPool2x2
+from ._blocks import Conv1x1, MaxPool2x2
 from ._common import ChannelAttention
+from ._utils import KaimingInitMixin
 
 
 class ConvBlockNested(nn.Layer):
@@ -52,7 +53,7 @@ class Up(nn.Layer):
         return x
 
 
-class SNUNet(nn.Layer):
+class SNUNet(nn.Layer, KaimingInitMixin):
     def __init__(self, in_ch=3, out_ch=2, width=32):
         super().__init__()
 
@@ -95,7 +96,9 @@ class SNUNet(nn.Layer):
         self.ca_intra = ChannelAttention(filters[0], ratio=4)
         self.ca_inter = ChannelAttention(filters[0]*4, ratio=16)
 
-        self.conv_out = BasicConv(filters[0]*4, out_ch, kernel_size=1)
+        self.conv_out = Conv1x1(filters[0]*4, out_ch)
+
+        self._init_weight()
 
     def forward(self, t1, t2):
         x0_0_t1 = self.conv0_0(t1)
