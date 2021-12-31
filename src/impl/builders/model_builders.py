@@ -61,3 +61,27 @@ def build_snunet_model(C):
 def build_stanet_model(C):
     from models.stanet import STANet
     return STANet(**C['stanet_model'])
+
+
+@MODELS.register_func('LUNet_model')
+def build_lunet_model(C):
+    from models.lunet import LUNet
+    return LUNet(3, 2)
+
+
+@MODELS.register_func('P2V_model')
+def build_p2v_model(C):
+    from models.p2v import P2VNet
+    return P2VNet(**C['p2v_model'])
+
+
+@MODELS.register_func('DSAMNet_model')
+def build_dsamnet_model(C):
+    from models.dsamnet import DSAMNet
+    return DSAMNet(**C['dsamnet_model'])
+
+
+@MODELS.register_func('BIT_model')
+def build_bit_model(C):
+    from models.bit import BIT
+    return BIT(**C['bit_model'])
