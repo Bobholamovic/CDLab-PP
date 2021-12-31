@@ -39,6 +39,35 @@ class CombinedLoss(nn.Layer):
         return loss
 
 
+class CombinedLoss_DS(nn.Layer):
+    def __init__(self, critn_main, critn_aux, coeff_main=1.0, coeffs_aux=1.0, main_idx=0):
+        super().__init__()
+        self.critn_main = critn_main
+        self.critn_aux = critn_aux
+        self.coeff_main = coeff_main
+        self.coeffs_aux = coeffs_aux
+        self.main_idx = main_idx
+
+    def forward(self, preds, tar, tar_aux=None):
+        if tar_aux is None:
+            tar_aux = tar
+
+        pred_main = preds[self.main_idx]
+        preds_aux = [pred for i, pred in enumerate(preds) if i != self.main_idx]
+
+        if isinstance(self.coeffs_aux, float):
+            coeffs_aux = [self.coeffs_aux]*len(preds_aux)
+        else:
+            coeffs_aux = self.coeffs_aux
+        if len(coeffs_aux) != len(preds_aux):
+            raise ValueError
+
+        loss = self.critn_main(pred_main, tar)
+        for coeff, pred in zip(coeffs_aux, preds_aux):
+            loss += coeff * self.critn_aux(pred, tar_aux)
+        return loss
+
+
 class DiceLoss(nn.Layer):
     def forward(self, pred, tar):
         pred, tar = pred.flatten(1), tar.flatten(1)
