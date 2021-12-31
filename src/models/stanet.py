@@ -2,14 +2,16 @@
 # H. Chen and Z. Shi, “A Spatial-Temporal Attention-Based Method and a New Dataset for Remote Sensing Image Change Detection,” Remote Sensing, vol. 12, no. 10, p. 1662, 2020, doi: 10.3390/rs12101662.
 
 # Refer to https://github.com/justchenhao/STANet
+# The resnet implementation differs from the original work. 
+# The most notable difference is that multiple dilation rates are not used in layer4.
 
-# TODO: re-implement resnet backbone in this repo
+# TODO: re-implement resnet backbone in this repo.
 
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
-from paddle.vision.models import resnet
 
+from .backbones import resnet
 from ._blocks import Conv1x1, Conv3x3
 from ._utils import KaimingInitMixin, Identity
 
@@ -31,15 +33,15 @@ def build_sta_module(in_ch, att_type, ds):
 
 
 class Backbone(nn.Layer, KaimingInitMixin):
-    def __init__(self, in_ch, arch, pretrained=True):
+    def __init__(self, in_ch, arch, pretrained=True, strides=(2,1,2,2,2)):
         super().__init__()
 
         if arch == 'resnet18':
-            self.resnet = resnet.resnet18(pretrained=pretrained)
+            self.resnet = resnet.resnet18(pretrained=pretrained, strides=strides)
         elif arch == 'resnet34':
-            self.resnet = resnet.resnet34(pretrained=pretrained)
+            self.resnet = resnet.resnet34(pretrained=pretrained, strides=strides)
         elif arch == 'resnet50':
-            self.resnet = resnet.resnet50(pretrained=pretrained)
+            self.resnet = resnet.resnet50(pretrained=pretrained, strides=strides)
         else:
             raise ValueError
 
@@ -50,7 +52,7 @@ class Backbone(nn.Layer, KaimingInitMixin):
                 in_ch, 
                 self.resnet.inplanes,
                 kernel_size=7,
-                stride=2,
+                stride=strides[0],
                 padding=3,
                 bias_attr=False
             )
@@ -97,7 +99,7 @@ class Decoder(nn.Layer, KaimingInitMixin):
         f3 = self.dr3(feats[2])
         f4 = self.dr4(feats[3])
 
-        f2 = F.interpolate(f1, size=f1.shape[2:], mode='bilinear', align_corners=True)
+        f2 = F.interpolate(f2, size=f1.shape[2:], mode='bilinear', align_corners=True)
         f3 = F.interpolate(f3, size=f1.shape[2:], mode='bilinear', align_corners=True)
         f4 = F.interpolate(f4, size=f1.shape[2:], mode='bilinear', align_corners=True)
 
