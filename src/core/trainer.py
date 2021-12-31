@@ -37,7 +37,7 @@ class Trainer(metaclass=ABCMeta):
         )
         self.path = self.gpc.get_path
         
-        self.logger.show(self._format_options(settings))
+        self.logger.show_nl(self._format_options(settings))
 
         self.model = model_factory(model, settings)
         self.criterion = critn_factory(criterion, settings)
