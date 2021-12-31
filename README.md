@@ -68,6 +68,10 @@ FC-Siam-diff | `SiamUnet-diff` | [paper](https://ieeexplore.ieee.org/abstract/do
 STANet | `STANet` | [paper](https://www.mdpi.com/2072-4292/12/10/1662)
 DSIFN | `IFN` | [paper](https://www.sciencedirect.com/science/article/pii/S0924271620301532)
 SNUNet | `SNUNet` | [paper](https://ieeexplore.ieee.org/document/9355573)
+BIT | `BIT` | [paper](https://ieeexplore.ieee.org/document/9491802)
+L-UNet | `LUNet` | [paper](https://ieeexplore.ieee.org/document/9352207)
+DSAMNet | `DSAMNet` | [paper](https://ieeexplore.ieee.org/document/9467555)
+P2V-CD | `P2V` | 
 
 ## Supported Datasets
 
@@ -77,8 +81,8 @@ SZTAKI AirChange Benchmark set: Szada set | `AC-Szada` | [website](http://web.ee
 SZTAKI AirChange Benchmark set: Tiszadob set | `AC-Tiszadob` | [website](http://web.eee.sztaki.hu/remotesensing/airchange_benchmark.html)
 Onera Satellite Change Detection dataset | `OSCD` | [website](https://rcdaudt.github.io/oscd/)
 Synthetic images and real season-varying remote sensing images | `SVCD` | [google drive](https://drive.google.com/file/d/1GX656JqqOyBi_Ef0w65kDGVto-nHrNs9)
-LEVIR building change detection dataset | `LEVIRCD` | [website](https://justchenhao.github.io/LEVIR/)
 WHU building change detection dataset | `WHU` | [website](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html)
+LEVIR building change detection dataset | `LEVIRCD` | [website](https://justchenhao.github.io/LEVIR/)
 
 
 *This repository is currently under development. Note that no license has yet been added.*
