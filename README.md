@@ -4,6 +4,8 @@ Developing and benchmarking deep learning-based remote sensing change detection 
 
 *CDLab also has a [PyTorch version](https://github.com/Bobholamovic/CDLab). Currently, this repo contains more model implementations, dataset interfaces, and configuration files.*
 
+English | [简体中文](README_zh-CN.md)
+
 ## Prerequisites
 
 > opencv-python==4.1.1  
@@ -21,6 +23,10 @@ Tested using Python 3.7.4 on Ubuntu 16.04.
 
 In `src/constants.py`, change the dataset locations to your own.
 
+### Data Preprocessing
+
+In `scripts/` there are preprocessing scripts for several datasets。
+
 ### Model Training
 
 To train a model from scratch, use
@@ -29,7 +35,7 @@ To train a model from scratch, use
 python train.py train --exp_config PATH_TO_CONFIG_FILE
 ```
 
-A few configuration files regarding different datasets and models are provided in the `configs/` folder for ease of use. 
+A few configuration files regarding different datasets and models are provided in the `configs/` folder for ease of use. *Note that the hyperparameters are not elaborately investigated to obtain a fully optimized performance.*
 
 As soon as the program starts and prints out the configurations, there will be a prompt asking you to write some notes. What you write will be recorded into the log file to help you remember what you did, or you can simply skip this step by pressing `[Enter]`.
 
@@ -47,7 +53,7 @@ Other frequently used commandline options include:
 - `--vdl_on`: Enable VisualDL summaries.
 - `--debug_on`: Useful when you are debugging your own code. In debugging mode, no checkpoint or model output will be written to disk. In addition, a breakpoint will be set where an unhandled exception occurs, which allows you to locate the causes of the crash or do some cleanup jobs.
 
-During or after the training process, you can check the model weight files in `exp/DATASET_NAME/weights/`, the log files in `exp/DATASET_NAME/logs`, and the output change maps in `exp/DATASET_NAME/out`.
+During or after the training process, you can check the model weight files in `exp/DATASET_NAME/weights/`, the log files in `exp/DATASET_NAME/logs/`, and the output change maps in `exp/DATASET_NAME/out/`.
 
 ### Model Evaluation
 
@@ -57,7 +63,7 @@ To evaluate a model on the test subset, use
 python train.py eval --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT --save_on --subset test
 ```
 
-This repo also provides the funtionality of sliding-window test on large raster images. Use the following command:
+This project also provides the funtionality of sliding-window test on large raster images. Use the following command:
 
 ```bash
 python sw_test.py --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT --ckp_path PATH_TO_CHECKPOINT --t1_dir PATH_TO_T1_DIR --t2_dir PATH_TO_T2_DIR --gt_dir PATH_TO_GT_DIR
