@@ -73,17 +73,19 @@ class Preprocessor:
 
 
 class PostProcessor:
-    def __init__(self, out_ch, out_idx=0):
-        self.out_ch = out_ch
-        self.out_idx = out_idx
+    def __init__(self, out_type, out_key=0):
+        self.out_type = out_type
+        self.out_key = out_key
 
     def __call__(self, pred):
-        if isinstance(pred, (tuple, list)):
-            pred = pred[self.out_idx]
-        if self.out_ch == 1:
+        if not isinstance(pred, paddle.Tensor):
+            pred = pred[self.out_key]
+        if self.out_type == 'logits':
             return to_array(paddle.nn.functional.sigmoid(pred)[0,0])
-        elif self.out_ch == 2:
+        elif self.out_type == 'logits2':
             return to_array(paddle.nn.functional.softmax(pred, axis=1)[0,1])
+        elif self.out_type == 'dist':
+            return to_array(pred.squeeze(1))
         else:
             raise ValueError
 
@@ -129,11 +131,11 @@ def main():
         parser.add_argument('--window_size', type=int, default=256)
         parser.add_argument('--stride', type=int, default=256)
         parser.add_argument('--save_on', action='store_true')
-        parser.add_argument('--mu', type=float, nargs='+')
-        parser.add_argument('--sigma', type=float, nargs='+')
+        parser.add_argument('--mu', type=float, nargs='+', default=(0.0,0.0,0.0))
+        parser.add_argument('--sigma', type=float, nargs='+', default=(255.0,255.0,255.0))
         parser.add_argument('--glob', type=str, default='*.png')
-        parser.add_argument('--thresh', type=float, default=0.5)
-        parser.add_argument('--out_ch', type=int, default=1)
+        parser.add_argument('--threshold', type=float, default=0.5)
+        parser.add_argument('--out_type', type=str, choices=['logits', 'logits2', 'dist'], default='logits')
 
         return parser
     
@@ -147,7 +149,7 @@ def main():
     model = prepare_model(args)
 
     prep = Preprocessor(args['mu'], args['sigma'])
-    postp = PostProcessor(args['out_ch'])
+    postp = PostProcessor(args['out_type'])
 
     prec, rec, f1, acc = Precision(mode='accum'), Recall(mode='accum'), F1Score(mode='accum'), Accuracy(mode='accum')
     

@@ -3,7 +3,7 @@ import paddle
 from .cd_trainer import CDTrainer
 
 
-class STANetTrainer(CDTrainer):
+class CDTrainer_metric(CDTrainer):
     def _init_trainer(self):
         self.thresh = self.ctx['threshold']
 

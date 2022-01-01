@@ -37,7 +37,7 @@ def main():
         parser.add_argument('--save_on', action='store_true')
         parser.add_argument('--out_dir', default='')
         parser.add_argument('--weights', type=float, nargs='+', default=None)
-        parser.add_argument('--argmax_on', action='store_true')
+        parser.add_argument('--out_type', type=str, choices=['logits', 'logits2', 'dist'], default='logits')
 
         return parser
         
