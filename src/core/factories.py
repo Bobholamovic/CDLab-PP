@@ -1,6 +1,7 @@
 from inspect import isfunction, isgeneratorfunction, getmembers
 from collections.abc import Sequence
 from abc import ABC
+
 import paddle
 import paddle.nn as nn
 import paddle.io as io
@@ -37,6 +38,7 @@ def _generator_deco(func_name):
 class Duck(Sequence, ABC):
     __ducktype__ = object
     __ava__ = ()
+
     def __init__(self, *args):
         if not all(map(self._check, args)):
             raise TypeError("Please check the input type.")
