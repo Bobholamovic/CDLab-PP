@@ -3,6 +3,7 @@
 out_dir: p2v
 criterion: WBCE
 model: P2V
+out_type: logits
 
 p2v_model:
   in_ch: 3

@@ -56,4 +56,4 @@ weights:
 
 # Model
 model: 
-argmax_on: True
+out_type: logits2

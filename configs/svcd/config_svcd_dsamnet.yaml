@@ -3,6 +3,7 @@
 out_dir: dsamnet
 criterion: BC
 model: DSAMNet
+out_type: dist
 
 dsamnet_model:
   in_ch: 3
