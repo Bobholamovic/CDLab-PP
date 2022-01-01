@@ -39,7 +39,7 @@ To resume training from some checkpoint, run the code with the `--resume` option
 python train.py train --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT
 ```
 
-Other commandline options include:
+Other frequently used commandline options include:
 
 - `--anew`: Add it if the checkpoint is just used to initialize model weights. Note that loading an incompatible checkpoint is supported as a feature, which is useful when you are trying to utilize a well pretrained model for finetuning.
 - `--save_on`: By default, an epoch-based trainer is used for training. At the end of each training epoch, the trainer evaluates the model on the validation dataset. If you want to save the model output during the evaluation process, enable this option.
@@ -56,6 +56,20 @@ To evaluate a model on the test subset, use
 ```bash
 python train.py eval --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT --save_on --subset test
 ```
+
+This repo also provides the funtionality of sliding-window test on large raster images. Use the following command:
+
+```bash
+python sw_test.py --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT --ckp_path PATH_TO_CHECKPOINT --t1_dir PATH_TO_T1_DIR --t2_dir PATH_TO_T2_DIR --gt_dir PATH_TO_GT_DIR
+```
+
+Other frequently used commandline options of `src/sw_test.py` include:
+- `--window_size`: Set the size of the sliding window.
+- `--stride`: Set the stride of the sliding window.
+- `--glob`: Specify a wildcard pattern to match files in `t1_dir`, `t2_dir`, and `gt_dir`.
+- `--threshold`: Set the threshold used to convert the probability map to the change map.
+
+Note however that currently `src/sw_test.py` does not support custom pre-processing or post-processing modules.
 
 ## Supported Architectures
 
