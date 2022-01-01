@@ -1,9 +1,6 @@
-# from functools import wraps
 from inspect import isfunction, isgeneratorfunction, getmembers
 from collections.abc import Sequence
 from abc import ABC
-from itertools import chain
-
 import paddle
 import paddle.nn as nn
 import paddle.io as io
@@ -81,6 +78,7 @@ def duck_it(cls):
 class DuckModel(nn.Layer):
     __ducktype__ = nn.Layer
     __ava__ = ('state_dict', 'set_state_dict', 'forward', '__call__', 'train', 'eval', 'to')
+
     def __init__(self, *models):
         super().__init__()
         # XXX: The state_dict will be a little larger in size,
@@ -110,6 +108,7 @@ Duck.register(DuckModel)
 class DuckOptimizer(Duck):
     __ducktype__ = paddle.optimizer.Optimizer
     __ava__ = ('state_dict', 'set_state_dict', 'clear_grad', 'step', 'get_lr')
+
     # Sepcial dispatching rule
     def set_state_dict(self, state_dicts):
         for optim, state_dict in zip(self, state_dicts):
@@ -120,6 +119,7 @@ class DuckOptimizer(Duck):
 class DuckCriterion(Duck):
     __ducktype__ = nn.Layer
     __ava__ = ('forward', '__call__', 'train', 'eval', 'to')
+
     pass
 
 
@@ -127,6 +127,7 @@ class DuckCriterion(Duck):
 class DuckDataLoader(Duck):
     __ducktype__ = io.DataLoader
     __ava__ = ()
+    
     pass
 
 
