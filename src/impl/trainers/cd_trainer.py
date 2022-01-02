@@ -69,7 +69,6 @@ class CDTrainer(Trainer):
         self.model.train()
         
         for i, (t1, t2, tar) in enumerate(pb):
-            if i == 2: break
             t1, t2, tar = self._prepare_data(t1, t2, tar)
 
             show_imgs_on_vdl = self.vdl_on and (i%self.vdl_intvl == 0)
@@ -130,7 +129,6 @@ class CDTrainer(Trainer):
 
         with paddle.no_grad():
             for i, (name, t1, t2, tar) in enumerate(pb):
-                if i == 2: break
                 t1, t2, tar = self._prepare_data(t1, t2, tar)
 
                 fetch_dict = self._set_fetch_dict()
