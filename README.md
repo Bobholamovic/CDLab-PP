@@ -68,7 +68,9 @@ python train.py eval --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOIN
 This project also provides the funtionality of sliding-window test on large raster images. Use the following command:
 
 ```bash
-python sw_test.py --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT --ckp_path PATH_TO_CHECKPOINT --t1_dir PATH_TO_T1_DIR --t2_dir PATH_TO_T2_DIR --gt_dir PATH_TO_GT_DIR
+python sw_test.py --exp_config PATH_TO_CONFIG_FILE \
+  --resume PATH_TO_CHECKPOINT --ckp_path PATH_TO_CHECKPOINT \
+  --t1_dir PATH_TO_T1_DIR --t2_dir PATH_TO_T2_DIR --gt_dir PATH_TO_GT_DIR
 ```
 
 Other frequently used commandline options of `src/sw_test.py` include:

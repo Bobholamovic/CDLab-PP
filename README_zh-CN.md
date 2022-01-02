@@ -70,7 +70,9 @@ python train.py eval --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOIN
 本项目也提供在大幅栅格影像上进行滑窗测试的功能。使用如下指令：
 
 ```bash
-python sw_test.py --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOINT --ckp_path PATH_TO_CHECKPOINT --t1_dir PATH_TO_T1_DIR --t2_dir PATH_TO_T2_DIR --gt_dir PATH_TO_GT_DIR
+python sw_test.py --exp_config PATH_TO_CONFIG_FILE \
+  --resume PATH_TO_CHECKPOINT --ckp_path PATH_TO_CHECKPOINT \
+  --t1_dir PATH_TO_T1_DIR --t2_dir PATH_TO_T2_DIR --gt_dir PATH_TO_GT_DIR
 ```
 
 对于 `src/sw_test.py` 文件，其它一些常用的可选命令行参数包括：
