@@ -14,8 +14,8 @@ from ._blocks import Conv1x1, Conv3x3, MaxPool2x2
 class ConvBlock(nn.Sequential):
     def __init__(self, in_ch, out_ch):
         super().__init__(
-            Conv3x3(in_ch, out_ch, norm=nn.BatchNorm2D(out_ch), act=nn.ReLU()),
-            Conv3x3(out_ch, out_ch, norm=nn.BatchNorm2D(out_ch), act=nn.ReLU())
+            Conv3x3(in_ch, out_ch, norm=True, act=True),
+            Conv3x3(out_ch, out_ch, norm=True, act=True)
         )
 
 
@@ -23,7 +23,7 @@ class Up(nn.Sequential):
     def __init__(self, in_ch, out_ch):
         super().__init__(
             nn.Upsample(scale_factor=2),
-            Conv3x3(in_ch, out_ch, norm=nn.BatchNorm2D(out_ch), act=nn.ReLU()),
+            Conv3x3(in_ch, out_ch, norm=True, act=True),
         )
 
 

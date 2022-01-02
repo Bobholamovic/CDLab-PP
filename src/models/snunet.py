@@ -12,7 +12,7 @@ import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
 
-from ._blocks import Conv1x1, MaxPool2x2
+from ._blocks import Conv1x1, MaxPool2x2, make_norm
 from ._common import ChannelAttention
 from ._utils import KaimingInitMixin
 
@@ -22,9 +22,9 @@ class ConvBlockNested(nn.Layer):
         super().__init__()
         self.act = nn.ReLU()
         self.conv1 = nn.Conv2D(in_ch, mid_ch, kernel_size=3, padding=1)
-        self.bn1 = nn.BatchNorm2D(mid_ch)
+        self.bn1 = make_norm(mid_ch)
         self.conv2 = nn.Conv2D(mid_ch, out_ch, kernel_size=3, padding=1)
-        self.bn2 = nn.BatchNorm2D(out_ch)
+        self.bn2 = make_norm(out_ch)
 
     def forward(self, x):
         x = self.conv1(x)

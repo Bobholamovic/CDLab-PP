@@ -9,14 +9,14 @@ import paddle.nn.functional as F
 from paddle.nn.initializer import Normal
 
 from .backbones import resnet
-from ._blocks import Conv3x3, Conv1x1
+from ._blocks import Conv3x3, Conv1x1, get_norm_layer
 from ._utils import Identity, KaimingInitMixin
 
 
 class DoubleConv(nn.Sequential):
     def __init__(self, in_ch, out_ch):
         super().__init__(
-            Conv3x3(in_ch, in_ch, norm=nn.BatchNorm2D(in_ch), act=nn.ReLU()),
+            Conv3x3(in_ch, in_ch, norm=True, act=True),
             Conv3x3(in_ch, out_ch)
         )
 
@@ -163,9 +163,9 @@ class Backbone(nn.Layer, KaimingInitMixin):
         expand = 1
         strides = (2,1,2,1,1)
         if arch == 'resnet18':
-            self.resnet = resnet.resnet18(pretrained=pretrained, strides=strides)
+            self.resnet = resnet.resnet18(pretrained=pretrained, strides=strides, norm_layer=get_norm_layer())
         elif arch == 'resnet34':
-            self.resnet = resnet.resnet34(pretrained=pretrained, strides=strides)
+            self.resnet = resnet.resnet34(pretrained=pretrained, strides=strides, norm_layer=get_norm_layer())
         else:
             raise ValueError
 

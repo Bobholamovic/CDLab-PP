@@ -10,7 +10,7 @@ class ChannelAttention(nn.Layer):
         super().__init__()
         self.avg_pool = nn.AdaptiveAvgPool2D(1)
         self.max_pool = nn.AdaptiveMaxPool2D(1)
-        self.fc1 = Conv1x1(in_ch, in_ch//ratio, bias=False, act=nn.ReLU())
+        self.fc1 = Conv1x1(in_ch, in_ch//ratio, bias=False, act=True)
         self.fc2 = Conv1x1(in_ch//ratio, in_ch, bias=False)
 
     def forward(self,x):

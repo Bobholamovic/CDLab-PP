@@ -1,3 +1,5 @@
+# TODO: make norm3d layer types changeable in temporal branch.
+
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
@@ -8,8 +10,8 @@ from ._blocks import Conv1x1, Conv3x3, MaxPool2x2
 class ResBlock(nn.Layer):
     def __init__(self, in_ch, out_ch):
         super().__init__()
-        self.conv1 = Conv3x3(in_ch, out_ch, norm=nn.BatchNorm2D(out_ch), act=nn.ReLU())
-        self.conv2 = Conv3x3(out_ch, out_ch, norm=nn.BatchNorm2D(out_ch))
+        self.conv1 = Conv3x3(in_ch, out_ch, norm=True, act=True)
+        self.conv2 = Conv3x3(out_ch, out_ch, norm=True)
     
     def forward(self, x):
         x = self.conv1(x)
@@ -19,9 +21,9 @@ class ResBlock(nn.Layer):
 class ResBlock2(nn.Layer):
     def __init__(self, in_ch, out_ch):
         super().__init__()
-        self.conv1 = Conv3x3(in_ch, out_ch, norm=nn.BatchNorm2D(out_ch), act=nn.ReLU())
-        self.conv2 = Conv3x3(out_ch, out_ch, norm=nn.BatchNorm2D(out_ch), act=nn.ReLU())
-        self.conv3 = Conv3x3(out_ch, out_ch, norm=nn.BatchNorm2D(out_ch))
+        self.conv1 = Conv3x3(in_ch, out_ch, norm=True, act=True)
+        self.conv2 = Conv3x3(out_ch, out_ch, norm=True, act=True)
+        self.conv3 = Conv3x3(out_ch, out_ch, norm=True)
     
     def forward(self, x):
         x = self.conv1(x)
@@ -178,7 +180,7 @@ class SimpleDecoder(nn.Layer):
         super().__init__()
         
         enc_chs = enc_chs[::-1]
-        self.conv_bottom = Conv3x3(itm_ch, itm_ch, norm=nn.BatchNorm2D(itm_ch), act=nn.ReLU())
+        self.conv_bottom = Conv3x3(itm_ch, itm_ch, norm=True, act=True)
         self.blocks = nn.LayerList([
             DecBlock(in_ch1, in_ch2, out_ch)
             for in_ch1, in_ch2, out_ch in zip(enc_chs, (itm_ch,)+dec_chs[:-1], dec_chs)
@@ -210,7 +212,7 @@ class P2VNet(nn.Layer):
         self.conv_out_v = Conv1x1(enc_chs_v[-1], 1)
         self.convs_video = nn.LayerList(
             [
-                Conv1x1(2*ch, ch, norm=nn.BatchNorm2D(ch), act=nn.ReLU())
+                Conv1x1(2*ch, ch, norm=True, act=True)
                 for ch in enc_chs_v
             ]
         )

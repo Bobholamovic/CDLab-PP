@@ -18,7 +18,7 @@ class KaimingInitMixin:
         for layer in self.sublayers():
             if isinstance(layer, nn.Conv2D):
                 kaiming_normal_init(layer.weight)
-            elif isinstance(layer, nn.BatchNorm2D):
+            elif isinstance(layer, (nn.BatchNorm, nn.SyncBatchNorm)):
                 constant_init(layer.weight, value=1)
                 constant_init(layer.bias, value=0)
 

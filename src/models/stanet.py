@@ -12,7 +12,7 @@ import paddle.nn as nn
 import paddle.nn.functional as F
 
 from .backbones import resnet
-from ._blocks import Conv1x1, Conv3x3
+from ._blocks import Conv1x1, Conv3x3, get_norm_layer
 from ._utils import KaimingInitMixin, Identity
 
 
@@ -37,11 +37,11 @@ class Backbone(nn.Layer, KaimingInitMixin):
         super().__init__()
 
         if arch == 'resnet18':
-            self.resnet = resnet.resnet18(pretrained=pretrained, strides=strides)
+            self.resnet = resnet.resnet18(pretrained=pretrained, strides=strides, norm_layer=get_norm_layer())
         elif arch == 'resnet34':
-            self.resnet = resnet.resnet34(pretrained=pretrained, strides=strides)
+            self.resnet = resnet.resnet34(pretrained=pretrained, strides=strides, norm_layer=get_norm_layer())
         elif arch == 'resnet50':
-            self.resnet = resnet.resnet50(pretrained=pretrained, strides=strides)
+            self.resnet = resnet.resnet50(pretrained=pretrained, strides=strides, norm_layer=get_norm_layer())
         else:
             raise ValueError
 
@@ -81,14 +81,14 @@ class Backbone(nn.Layer, KaimingInitMixin):
 class Decoder(nn.Layer, KaimingInitMixin):
     def __init__(self, f_ch):
         super().__init__()
-        self.dr1 = Conv1x1(64, 96, norm=nn.BatchNorm2D(96), act=nn.ReLU())
-        self.dr2 = Conv1x1(128, 96, norm=nn.BatchNorm2D(96), act=nn.ReLU())
-        self.dr3 = Conv1x1(256, 96, norm=nn.BatchNorm2D(96), act=nn.ReLU())
-        self.dr4 = Conv1x1(512, 96, norm=nn.BatchNorm2D(96), act=nn.ReLU())
+        self.dr1 = Conv1x1(64, 96, norm=True, act=True)
+        self.dr2 = Conv1x1(128, 96, norm=True, act=True)
+        self.dr3 = Conv1x1(256, 96, norm=True, act=True)
+        self.dr4 = Conv1x1(512, 96, norm=True, act=True)
         self.conv_out = nn.Sequential(
-            Conv3x3(384, 256, norm=nn.BatchNorm2D(256), act=nn.ReLU()),
+            Conv3x3(384, 256, norm=True, act=True),
             nn.Dropout(0.5),
-            Conv1x1(256, f_ch, norm=nn.BatchNorm2D(f_ch), act=nn.ReLU())
+            Conv1x1(256, f_ch, norm=True, act=True)
         )
 
         self._init_weight()
@@ -158,8 +158,8 @@ class PAMBlock(nn.Layer):
 
         self.val_ch = in_ch
         self.key_ch = in_ch // 8
-        self.conv_q = Conv1x1(in_ch, self.key_ch, norm=nn.BatchNorm2D(self.key_ch))
-        self.conv_k = Conv1x1(in_ch, self.key_ch, norm=nn.BatchNorm2D(self.key_ch))
+        self.conv_q = Conv1x1(in_ch, self.key_ch, norm=True)
+        self.conv_k = Conv1x1(in_ch, self.key_ch, norm=True)
         self.conv_v = Conv1x1(in_ch, self.val_ch)
 
     def forward(self, x):

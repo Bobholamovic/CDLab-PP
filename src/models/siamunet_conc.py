@@ -22,62 +22,62 @@ class SiamUnet_conc(nn.Layer):
 
         self.use_dropout = use_dropout
 
-        self.conv11 = Conv3x3(in_ch, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
+        self.conv11 = Conv3x3(in_ch, 16, norm=True, act=True)
         self.do11 = self.make_dropout()
-        self.conv12 = Conv3x3(16, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
+        self.conv12 = Conv3x3(16, 16, norm=True, act=True)
         self.do12 = self.make_dropout()
         self.pool1 = MaxPool2x2()
 
-        self.conv21 = Conv3x3(16, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
+        self.conv21 = Conv3x3(16, 32, norm=True, act=True)
         self.do21 = self.make_dropout()
-        self.conv22 = Conv3x3(32, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
+        self.conv22 = Conv3x3(32, 32, norm=True, act=True)
         self.do22 = self.make_dropout()
         self.pool2 = MaxPool2x2()
 
-        self.conv31 = Conv3x3(32, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv31 = Conv3x3(32, 64, norm=True, act=True)
         self.do31 = self.make_dropout()
-        self.conv32 = Conv3x3(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv32 = Conv3x3(64, 64, norm=True, act=True)
         self.do32 = self.make_dropout()
-        self.conv33 = Conv3x3(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv33 = Conv3x3(64, 64, norm=True, act=True)
         self.do33 = self.make_dropout()
         self.pool3 = MaxPool2x2()
 
-        self.conv41 = Conv3x3(64, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv41 = Conv3x3(64, 128, norm=True, act=True)
         self.do41 = self.make_dropout()
-        self.conv42 = Conv3x3(128, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv42 = Conv3x3(128, 128, norm=True, act=True)
         self.do42 = self.make_dropout()
-        self.conv43 = Conv3x3(128, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv43 = Conv3x3(128, 128, norm=True, act=True)
         self.do43 = self.make_dropout()
         self.pool4 = MaxPool2x2()
 
         self.upconv4 = ConvTransposed3x3(128, 128, output_padding=1)
 
-        self.conv43d = Conv3x3(384, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv43d = Conv3x3(384, 128, norm=True, act=True)
         self.do43d = self.make_dropout()
-        self.conv42d = Conv3x3(128, 128, norm=nn.BatchNorm2D(128), act=nn.ReLU())
+        self.conv42d = Conv3x3(128, 128, norm=True, act=True)
         self.do42d = self.make_dropout()
-        self.conv41d = Conv3x3(128, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv41d = Conv3x3(128, 64, norm=True, act=True)
         self.do41d = self.make_dropout()
 
         self.upconv3 = ConvTransposed3x3(64, 64, output_padding=1)
 
-        self.conv33d = Conv3x3(192, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv33d = Conv3x3(192, 64, norm=True, act=True)
         self.do33d = self.make_dropout()
-        self.conv32d = Conv3x3(64, 64, norm=nn.BatchNorm2D(64), act=nn.ReLU())
+        self.conv32d = Conv3x3(64, 64, norm=True, act=True)
         self.do32d = self.make_dropout()
-        self.conv31d = Conv3x3(64, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
+        self.conv31d = Conv3x3(64, 32, norm=True, act=True)
         self.do31d = self.make_dropout()
 
         self.upconv2 = ConvTransposed3x3(32, 32, output_padding=1)
 
-        self.conv22d = Conv3x3(96, 32, norm=nn.BatchNorm2D(32), act=nn.ReLU())
+        self.conv22d = Conv3x3(96, 32, norm=True, act=True)
         self.do22d = self.make_dropout()
-        self.conv21d = Conv3x3(32, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
+        self.conv21d = Conv3x3(32, 16, norm=True, act=True)
         self.do21d = self.make_dropout()
 
         self.upconv1 = ConvTransposed3x3(16, 16, output_padding=1)
 
-        self.conv12d = Conv3x3(48, 16, norm=nn.BatchNorm2D(16), act=nn.ReLU())
+        self.conv12d = Conv3x3(48, 16, norm=True, act=True)
         self.do12d = self.make_dropout()
         self.conv11d = Conv3x3(16, out_ch)
 

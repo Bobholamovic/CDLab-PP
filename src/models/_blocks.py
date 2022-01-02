@@ -6,11 +6,31 @@ import paddle.nn.functional as F
 __all__ = ['BasicConv', 'Conv1x1', 'Conv3x3', 'Conv7x7', 'MaxPool2x2', 'MaxUnPool2x2', 'ConvTransposed3x3']
 
 
+def get_norm_layer():
+    # TODO: select appropriate norm layer
+    return nn.BatchNorm2D
+
+
+def get_act_layer():
+    # TODO: select appropriate activation layer
+    return nn.ReLU
+
+
+def make_norm(*args, **kwargs):
+    norm_layer = get_norm_layer()
+    return norm_layer(*args, **kwargs)
+
+
+def make_act(*args, **kwargs):
+    act_layer = get_act_layer()
+    return act_layer(*args, **kwargs)
+
+
 class BasicConv(nn.Layer):
     def __init__(
         self, in_ch, out_ch, 
         kernel_size, pad_mode='constant', 
-        bias='auto', norm=None, act=None, 
+        bias='auto', norm=False, act=False, 
         **kwargs
     ):
         super().__init__()
@@ -26,8 +46,12 @@ class BasicConv(nn.Layer):
             )
         )
         if norm:
+            if norm is True:
+                norm = make_norm(out_ch)
             seq.append(norm)
         if act:
+            if act is True:
+                act = make_act()
             seq.append(act)
         self.seq = nn.Sequential(*seq)
 
@@ -36,17 +60,17 @@ class BasicConv(nn.Layer):
 
 
 class Conv1x1(BasicConv):
-    def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=None, act=None, **kwargs):
+    def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=False, act=False, **kwargs):
         super().__init__(in_ch, out_ch, 1, pad_mode=pad_mode, bias=bias, norm=norm, act=act, **kwargs)
 
 
 class Conv3x3(BasicConv):
-    def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=None, act=None, **kwargs):
+    def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=False, act=False, **kwargs):
         super().__init__(in_ch, out_ch, 3, pad_mode=pad_mode, bias=bias, norm=norm, act=act, **kwargs)
 
 
 class Conv7x7(BasicConv):
-    def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=None, act=None, **kwargs):
+    def __init__(self, in_ch, out_ch, pad_mode='constant', bias='auto', norm=False, act=False, **kwargs):
         super().__init__(in_ch, out_ch, 7, pad_mode=pad_mode, bias=bias, norm=norm, act=act, **kwargs)
 
 
@@ -63,7 +87,7 @@ class MaxUnPool2x2(nn.MaxUnPool2D):
 class ConvTransposed3x3(nn.Layer):
     def __init__(
         self, in_ch, out_ch,
-        bias='auto', norm=None, act=None, 
+        bias='auto', norm=False, act=False, 
         **kwargs
     ):
         super().__init__()
@@ -77,8 +101,12 @@ class ConvTransposed3x3(nn.Layer):
             )
         )
         if norm:
+            if norm is True:
+                norm = make_norm(out_ch)
             seq.append(norm)
         if act:
+            if act is True:
+                act = make_act()
             seq.append(act)
         self.seq = nn.Sequential(*seq)
 

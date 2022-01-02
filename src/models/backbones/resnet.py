@@ -166,7 +166,7 @@ class ResNet(nn.Layer):
             resnet18 = ResNet(BasicBlock, 18)
     """
 
-    def __init__(self, block, depth, num_classes=1000, with_pool=True, strides=(1,1,2,2,2)):
+    def __init__(self, block, depth, num_classes=1000, with_pool=True, strides=(1,1,2,2,2), norm_layer=None):
         super(ResNet, self).__init__()
         layer_cfg = {
             18: [2, 2, 2, 2],
@@ -178,7 +178,7 @@ class ResNet(nn.Layer):
         layers = layer_cfg[depth]
         self.num_classes = num_classes
         self.with_pool = with_pool
-        self._norm_layer = nn.BatchNorm2D
+        self._norm_layer = nn.BatchNorm2D if norm_layer is None else norm_layer
 
         self.inplanes = 64
         self.dilation = 1
