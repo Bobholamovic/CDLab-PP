@@ -55,9 +55,8 @@ class Logger:
     def show(self, *args, **kwargs):
         return self._logger.info(*args, **kwargs)
 
-    def show_nl(self, *args, **kwargs):
-        self._logger.info("")
-        return self.show(*args, **kwargs)
+    def show_nl(self, msg, *args, **kwargs):
+        return self.show('\n'+str(msg), *args, **kwargs)
 
     def dump(self, *args, **kwargs):
         return self._logger.debug(*args, **kwargs)
