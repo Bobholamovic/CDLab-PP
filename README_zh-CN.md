@@ -53,6 +53,8 @@ python train.py train --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOI
 - `tb_on`: 指定此选项以启用 tensorboard 日志。
 - `debug_on`: 指定此选项以在程序崩溃处自动设置断点，便于进行事后调试。
 
+更多配置项可在[此处](docs/编写配置文件.md#可用的静态配置项列表)查看。
+
 在训练过程中或训练完成后，您可以在 `exp/DATASET_NAME/weights/` 目录下查看模型权重文件，在 `exp/DATASET_NAME/logs/` 目录下查看日志文件，在 `exp/DATASET_NAME/out/` 目录下查看输出的变化图。
 
 ### 模型评估
