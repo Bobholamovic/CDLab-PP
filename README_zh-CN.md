@@ -1,5 +1,7 @@
 # Change Detection Laboratory
 
+*注意，项目仍在开发中，尚未发行稳定版本*
+
 使用 [PaddlePaddle](https://www.paddlepaddle.org.cn/) 开发的基于深度学习遥感影像变化检测项目，可作为算法开发、训练框架，也可作为基线测试平台。
 
 *CDLab也拥有 [PyTorch版本](https://github.com/Bobholamovic/CDLab)。目前，本仓库比 PyTorch 版本拥有更丰富的模型实现、数据集接口以及配置文件。*
@@ -112,4 +114,10 @@ LEVIR building change detection dataset | `LEVIRCD` | [website](https://justchen
 
 本项目基于[此模板](https://github.com/Bobholamovic/DuduLearnsToCode-Template)开发，针对 PaddlePaddle 框架做了一些迁移和改进。关于这部分的设计思想可参考[此处](https://github.com/Bobholamovic/DuduLearnsToCode-Template/blob/main/take_a_look_if_you_want.md)。
 
-*注意，本仓库仍在开发中，因此尚未添加任何开源证书。*
+## 开源许可证
+
+该项目采用 [Unlicense 开源许可证](/LICENSE)。
+
+## 贡献
+
+欢迎大家为本项目贡献代码和意见。

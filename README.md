@@ -1,5 +1,7 @@
 # Change Detection Laboratory
 
+*Note: This project is currently under development, and no stable version has yet been released.*
+
 Developing and benchmarking deep learning-based remote sensing change detection methods using [PaddlePaddle](https://www.paddlepaddle.org.cn/).
 
 *CDLab also has a [PyTorch version](https://github.com/Bobholamovic/CDLab). Currently, this repo contains more model implementations, dataset interfaces, and configuration files.*
@@ -104,5 +106,10 @@ Synthetic images and real season-varying remote sensing images | `SVCD` | [googl
 WHU building change detection dataset | `WHU` | [website](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html)
 LEVIR building change detection dataset | `LEVIRCD` | [website](https://justchenhao.github.io/LEVIR/)
 
+## License
 
-*This repository is currently under development. Note that no license has yet been added.*
+This project is released under the [Unlicense](/LICENSE).
+
+## Contributing
+
+Any kind of contributions to improve this repository is welcome.
