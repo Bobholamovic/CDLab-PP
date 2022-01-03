@@ -22,7 +22,7 @@ class VGG16FeaturePicker(nn.Layer):
         self.features = nn.LayerList(features)
         self.indices = set(indices)
 
-    def forward(self,x):
+    def forward(self, x):
         picked_feats = []
         for idx, model in enumerate(self.features):
             x = model(x)

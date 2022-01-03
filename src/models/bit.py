@@ -187,7 +187,7 @@ class Backbone(nn.Layer, KaimingInitMixin):
         if in_ch != 3:
             self.resnet.conv1 = nn.Conv2D(
                 in_ch, 
-                self.resnet.inplanes,
+                64,
                 kernel_size=7,
                 stride=2,
                 padding=3,

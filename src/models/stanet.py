@@ -5,8 +5,6 @@
 # The resnet implementation differs from the original work. 
 # The most notable difference is that multiple dilation rates are not used in layer4.
 
-# TODO: re-implement resnet backbone in this repo.
-
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
@@ -50,7 +48,7 @@ class Backbone(nn.Layer, KaimingInitMixin):
         if in_ch != 3:
             self.resnet.conv1 = nn.Conv2D(
                 in_ch, 
-                self.resnet.inplanes,
+                64,
                 kernel_size=7,
                 stride=strides[0],
                 padding=3,
