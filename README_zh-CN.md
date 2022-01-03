@@ -1,6 +1,6 @@
 # Change Detection Laboratory
 
-*注意，项目仍在开发中，尚未发行稳定版本*
+*注意，项目仍在开发中，尚未发行稳定版本。*
 
 使用 [PaddlePaddle](https://www.paddlepaddle.org.cn/) 开发的基于深度学习遥感影像变化检测项目，可作为算法开发、训练框架，也可作为基线测试平台。
 
@@ -97,7 +97,6 @@ SNUNet | `SNUNet` | [paper](https://ieeexplore.ieee.org/document/9355573)
 BIT | `BIT` | [paper](https://ieeexplore.ieee.org/document/9491802)
 L-UNet | `LUNet` | [paper](https://ieeexplore.ieee.org/document/9352207)
 DSAMNet | `DSAMNet` | [paper](https://ieeexplore.ieee.org/document/9467555)
-P2V-CD | `P2V` | 
 
 ## 预置数据集列表
 
