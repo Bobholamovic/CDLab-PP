@@ -16,5 +16,8 @@ class DSAMNetTrainer(CDTrainer):
     def _prepare_data(self, t1, t2, tar):
         return t1, t2, tar.astype('float32')
 
+    def _process_model_out(self, out):
+        return [o.squeeze(1) for o in out]
+
     def _pred_to_prob(self, pred):
         return (pred[0]>self.thresh).astype('float32')
