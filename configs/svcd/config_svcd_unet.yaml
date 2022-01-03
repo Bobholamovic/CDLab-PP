@@ -1,4 +1,4 @@
-# SVCD+Unet
+# SVCD+UNet
 
 out_dir: unet
-model: Unet
+model: UNet

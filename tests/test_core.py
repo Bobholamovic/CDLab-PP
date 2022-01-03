@@ -10,7 +10,7 @@ import impl.builders
 
 if __name__ == '__main__':
     C = dict(
-        model='Unet+Unet+SNUNet',
+        model='UNet+UNet+SNUNet',
         dataset='SVCD',
         optimizer='Adam+SGD+Adam',
         weight_decay=0.0,

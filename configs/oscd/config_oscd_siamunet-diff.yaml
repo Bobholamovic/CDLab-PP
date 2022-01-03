@@ -1,4 +1,4 @@
-# OSCD+SiamUnet-diff
+# OSCD+SiamUNet-diff
 
 out_dir: siamunet-diff
-model: SiamUnet-diff
+model: SiamUNet-diff

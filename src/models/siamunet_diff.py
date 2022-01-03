@@ -16,7 +16,7 @@ from ._blocks import Conv3x3, MaxPool2x2, ConvTransposed3x3
 from ._utils import Identity
 
 
-class SiamUnet_diff(nn.Layer):
+class SiamUNet_diff(nn.Layer):
     def __init__(self, in_ch, out_ch, use_dropout=False):
         super().__init__()
 

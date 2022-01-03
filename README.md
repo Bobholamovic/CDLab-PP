@@ -86,9 +86,9 @@ Note however that currently `src/sw_test.py` does not support custom pre-process
 Architecture | Name | Link
 :-:|:-:|:-:
 CDNet | `CDNet` | [paper](https://doi.org/10.1007/s10514-018-9734-5)
-FC-EF | `Unet` | [paper](https://ieeexplore.ieee.org/abstract/document/8451652)
-FC-Siam-conc | `SiamUnet-conc` | [paper](https://ieeexplore.ieee.org/abstract/document/8451652)
-FC-Siam-diff | `SiamUnet-diff` | [paper](https://ieeexplore.ieee.org/abstract/document/8451652)
+FC-EF | `UNet` | [paper](https://ieeexplore.ieee.org/abstract/document/8451652)
+FC-Siam-conc | `SiamUNet-conc` | [paper](https://ieeexplore.ieee.org/abstract/document/8451652)
+FC-Siam-diff | `SiamUNet-diff` | [paper](https://ieeexplore.ieee.org/abstract/document/8451652)
 STANet | `STANet` | [paper](https://www.mdpi.com/2072-4292/12/10/1662)
 DSIFN | `IFN` | [paper](https://www.sciencedirect.com/science/article/pii/S0924271620301532)
 SNUNet | `SNUNet` | [paper](https://ieeexplore.ieee.org/document/9355573)

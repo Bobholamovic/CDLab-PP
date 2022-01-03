@@ -1,4 +1,4 @@
-# SVCD+SiamUnet-diff
+# SVCD+SiamUNet-diff
 
 out_dir: siamunet-diff
-model: SiamUnet-diff
+model: SiamUNet-diff

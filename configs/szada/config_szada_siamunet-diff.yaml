@@ -1,4 +1,4 @@
-# Szada+SiamUnet-diff
+# Szada+SiamUNet-diff
 
 out_dir: siamunet-diff
-model: SiamUnet-diff
+model: SiamUNet-diff

@@ -1,4 +1,4 @@
-# LEVIR-CD+Unet
+# LEVIR-CD+UNet
 
 out_dir: unet
-model: Unet
+model: UNet

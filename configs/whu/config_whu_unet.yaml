@@ -1,4 +1,4 @@
-# WHU+Unet
+# WHU+UNet
 
 out_dir: unet
-model: Unet
+model: UNet

@@ -1,4 +1,4 @@
-# Tiszadob+SiamUnet-conc
+# Tiszadob+SiamUNet-conc
 
 out_dir: siamunet-conc
-model: SiamUnet-conc
+model: SiamUNet-conc

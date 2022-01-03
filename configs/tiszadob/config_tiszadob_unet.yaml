@@ -1,4 +1,4 @@
-# Tiszadob+Unet
+# Tiszadob+UNet
 
 out_dir: unet
-model: Unet
+model: UNet

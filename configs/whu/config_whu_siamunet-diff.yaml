@@ -1,4 +1,4 @@
-# WHU+SiamUnet-diff
+# WHU+SiamUNet-diff
 
 out_dir: siamunet-diff
-model: SiamUnet-diff
+model: SiamUNet-diff
