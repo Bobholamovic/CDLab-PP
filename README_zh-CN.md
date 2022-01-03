@@ -4,7 +4,7 @@
 
 使用 [PaddlePaddle](https://www.paddlepaddle.org.cn/) 开发的基于深度学习遥感影像变化检测项目，可作为算法开发、训练框架，也可作为基线测试平台。
 
-*CDLab也拥有 [PyTorch版本](https://github.com/Bobholamovic/CDLab)。目前，本仓库比 PyTorch 版本拥有更丰富的模型实现、数据集接口以及配置文件。*
+*CDLab也拥有 [PyTorch 版本](https://github.com/Bobholamovic/CDLab)。*
 
 [English](README.md) | 简体中文
 
@@ -52,7 +52,7 @@ python train.py train --exp_config PATH_TO_CONFIG_FILE --resume PATH_TO_CHECKPOI
 - `anew`: 如果您希望指定的检查点只是用于初始化模型参数，指定此选项。请注意，从一个不兼容的模型中获取部分层的参数对待训练的模型进行初始化也是允许的。
 - `save_on`: 如果需要在进行模型评估的同时储存模型的输出结果，指定此选项。项目默认采用基于 epoch 的训练器。在每个 epoch 末尾，训练器也将在验证集上评估模型的性能。
 - `log_off`: 指定此选项以禁用日志文件。
-- `tb_on`: 指定此选项以启用 tensorboard 日志。
+- `vdl_on`: 指定此选项以启用 VisualDL 日志。
 - `debug_on`: 指定此选项以在程序崩溃处自动设置断点，便于进行事后调试。
 
 更多配置项可在[此处](docs/编写配置文件.md#可用的静态配置项列表)查看。

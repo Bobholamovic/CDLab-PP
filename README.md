@@ -4,7 +4,7 @@
 
 Developing and benchmarking deep learning-based remote sensing change detection methods using [PaddlePaddle](https://www.paddlepaddle.org.cn/).
 
-*CDLab also has a [PyTorch version](https://github.com/Bobholamovic/CDLab). Currently, this repo contains more model implementations, dataset interfaces, and configuration files.*
+*CDLab also has a [PyTorch version](https://github.com/Bobholamovic/CDLab).*
 
 English | [简体中文](README_zh-CN.md)
 
