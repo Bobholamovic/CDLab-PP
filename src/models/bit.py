@@ -2,6 +2,7 @@
 # H. Chen, Z. Qi, and Z. Shi, “Remote Sensing Image Change Detection With Transformers,” IEEE Trans. Geosci. Remote Sensing, pp. 1–14, 2021, doi: 10.1109/TGRS.2021.3095166.
 
 # Refer to https://github.com/justchenhao/BIT_CD
+# The weight initialization method is different from the official implementation.
 
 import paddle
 import paddle.nn as nn
@@ -155,7 +156,7 @@ class Backbone(nn.Layer, KaimingInitMixin):
         self, 
         in_ch, out_ch=32,
         arch='resnet18',
-        pretrained=False,
+        pretrained=True,
         n_stages=5
     ):
         super().__init__()
@@ -180,6 +181,7 @@ class Backbone(nn.Layer, KaimingInitMixin):
         else:
             raise ValueError
             
+        self.upsample = nn.Upsample(scale_factor=2)
         self.conv_out = Conv3x3(itm_ch, out_ch)
 
         self._trim_resnet()
@@ -208,11 +210,13 @@ class Backbone(nn.Layer, KaimingInitMixin):
         y = self.resnet.layer3(y)
         y = self.resnet.layer4(y)
 
+        y = self.upsample(y)
+
         return self.conv_out(y)
 
     def _trim_resnet(self):
         if self.n_stages > 5:
-            raise NotImplementedError
+            raise ValueError
 
         if self.n_stages < 5:
             self.resnet.layer4 = Identity()
@@ -252,7 +256,7 @@ class BIT(nn.Layer):
             self.pool_mode = pool_mode
             self.token_len = pool_size * pool_size
         else:
-            self.conv_att = Conv1x1(32, token_len)
+            self.conv_att = Conv1x1(32, token_len, bias=False)
             self.token_len = token_len
 
         self.enc_with_pos = enc_with_pos
@@ -282,11 +286,11 @@ class BIT(nn.Layer):
             apply_softmax=dec_with_softmax
         )
 
-        self.upsample = nn.Upsample(scale_factor=8, mode='bilinear')
+        self.upsample = nn.Upsample(scale_factor=4, mode='bilinear')
         self.classifier = DoubleConv(chn, out_ch)
 
     def _get_semantic_tokens(self, x):
-        b, c= x.shape[:2]
+        b, c = x.shape[:2]
         att_map = self.conv_att(x)
         att_map = att_map.reshape((b,self.token_len,1,-1))
         att_map = F.softmax(att_map, axis=-1)
