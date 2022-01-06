@@ -1,5 +1,12 @@
 # SVCD+DSIFN
 
+lr: 0.0001
+schedulers:
+  - name: ReduceOnPlateau
+    learning_rate: 0.0001
+    mode: max
+    factor: 0.1
+    patience: 5
 mu:
   - 123.657
   - 116.28
