@@ -41,6 +41,11 @@ log_off: False
 track_intvl: 10
 vdl_on: False
 vdl_intvl: 15
+vdl_vis_bands:
+  - 0
+  - 1
+  - 2
+vdl_vis_norm: minmax
 suffix_off: True
 save_on: False
 out_dir: ''

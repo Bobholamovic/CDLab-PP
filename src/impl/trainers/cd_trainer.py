@@ -20,7 +20,7 @@ from utils.metrics import (Meter, Precision, Recall, Accuracy, F1Score)
 class CDTrainer(Trainer):
     def __init__(self, settings):
         super().__init__(settings['model'], settings['dataset'], settings['criterion'], settings['optimizer'], settings)
-        
+
         # Set up visualdl
         self.vdl_on = (hasattr(self.logger, 'log_path') or self.debug) and self.ctx['vdl_on']
         if self.vdl_on:
@@ -98,10 +98,11 @@ class CDTrainer(Trainer):
                 # Write to visualdl
                 self.vdl_writer.add_scalar("Train/running_loss", losses.val, self.train_step)
                 if show_imgs_on_vdl:
-                    t1 = self._denorm_image(to_array(t1.detach()[0]))
-                    t2 = self._denorm_image(to_array(t2.detach()[0]))
-                    self.vdl_writer.add_image("Train/t1_picked", normalize_8bit(t1), self.train_step, dataformats='HWC')
-                    self.vdl_writer.add_image("Train/t2_picked", normalize_8bit(t2), self.train_step, dataformats='HWC')
+                    t1, t2 = to_array(t1[0]), to_array(t2[0])
+                    t1, t2 = self._denorm_image(t1), self._denorm_image(t2)
+                    t1, t2 = self._process_input_pairs(t1, t2)
+                    self.vdl_writer.add_image("Train/t1_picked", t1, self.train_step, dataformats='HWC')
+                    self.vdl_writer.add_image("Train/t2_picked", t2, self.train_step, dataformats='HWC')
                     self.vdl_writer.add_image("Train/labels_picked", to_array(tar[0]), self.train_step, dataformats='HW')
                     for key, feats in out_dict.items():
                         for idx, feat in enumerate(feats):
@@ -162,10 +163,11 @@ class CDTrainer(Trainer):
 
                 if self.vdl_on:
                     if dump:
-                        t1 = self._denorm_image(to_array(t1[0]))
-                        t2 = self._denorm_image(to_array(t2[0]))
-                        self.vdl_writer.add_image("Eval/t1", normalize_8bit(t1), self.eval_step, dataformats='HWC')
-                        self.vdl_writer.add_image("Eval/t2", normalize_8bit(t2), self.eval_step, dataformats='HWC')
+                        t1, t2 = to_array(t1[0]), to_array(t2[0])
+                        t1, t2 = self._denorm_image(t1), self._denorm_image(t2)
+                        t1, t2 = self._process_input_pairs(t1, t2)
+                        self.vdl_writer.add_image("Eval/t1", t1, self.eval_step, dataformats='HWC')
+                        self.vdl_writer.add_image("Eval/t2", t2, self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/labels", quantize(tar), self.eval_step, dataformats='HW')
                         self.vdl_writer.add_image("Eval/prob", to_pseudo_color(quantize(prob)), self.eval_step, dataformats='HWC')
                         self.vdl_writer.add_image("Eval/cm", quantize(cm), self.eval_step, dataformats='HW')
@@ -202,6 +204,20 @@ class CDTrainer(Trainer):
 
     def _denorm_image(self, x):
         return x*np.asarray(self.ctx['sigma']) + np.asarray(self.ctx['mu'])
+
+    def _process_input_pairs(self, t1, t2):
+        vis_band_inds = self.ctx['vdl_vis_bands']
+        t1 = t1[...,vis_band_inds]
+        t2 = t2[...,vis_band_inds]
+        if self.ctx['vdl_vis_norm'] == '8bit':
+            t1 = normalize_8bit(t1)
+            t2 = normalize_8bit(t2)
+        else:
+            t1 = normalize_minmax(t1)
+            t2 = normalize_minmax(t2)
+        t1 = np.clip(t1, 0.0, 1.0)
+        t2 = np.clip(t2, 0.0, 1.0)
+        return t1, t2
 
     def _process_fetched_feat(self, feat):
         feat = normalize_minmax(feat.mean(1))

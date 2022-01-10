@@ -33,6 +33,8 @@ def main():
         parser.add_argument('--sigma', type=float, nargs='+', default=(255.0,))
         parser.add_argument('--vdl_on', action='store_true')
         parser.add_argument('--vdl_intvl', type=int, default=100)
+        parser.add_argument('--vdl_vis_bands', type=int, nargs='+', default=(0,1,2))
+        parser.add_argument('--vdl_vis_norm', type=str, default='8bit')
         parser.add_argument('--suffix_off', action='store_true')
         parser.add_argument('--save_on', action='store_true')
         parser.add_argument('--out_dir', default='')
@@ -44,9 +46,6 @@ def main():
     args = parse_args(parser_configurator)
 
     paddle.set_device(args['device'])
-
-    if args['dataset'] == 'OSCD' and args['vdl_on']:
-        raise NotImplementedError("Currently, data visualization through VisualDL on the OSCD dataset is not supported.")
 
     trainer = R['Trainer_switcher'](args)
 
