@@ -8,6 +8,8 @@
 # https://github.com/likyoo
 #
 
+# Bilinear interpolation is adopted as the default upsampling method, which is different from the paper.
+
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
