@@ -9,7 +9,6 @@ import numpy as np
 import constants
 from utils.data_utils.augmentations import *
 from utils.data_utils.preprocessors import *
-from utils.data_utils.preprocessors import Preprocess
 from core.misc import DATA, R
 from core.data import (
     build_train_dataloader, build_eval_dataloader, get_common_train_configs, get_common_eval_configs
@@ -55,7 +54,7 @@ def build_ac_szada_eval_dataset(C):
     from data.ac_szada import AC_SzadaDataset
     return io.DataLoader(
         AC_SzadaDataset(**configs),
-        batch_size=1,
+        batch_size=C['batch_size'],
         shuffle=False,
         num_workers=0,
         drop_last=False,
@@ -102,7 +101,7 @@ def build_ac_tiszadob_eval_dataset(C):
     from data.ac_tiszadob import AC_TiszadobDataset
     return io.DataLoader(
         AC_TiszadobDataset(**configs),
-        batch_size=1,
+        batch_size=C['batch_size'],
         shuffle=False,
         num_workers=0,
         drop_last=False,
@@ -147,7 +146,7 @@ def build_oscd_eval_dataset(C):
     from data.oscd import OSCDDataset
     return io.DataLoader(
         OSCDDataset(**configs),
-        batch_size=1,
+        batch_size=C['batch_size'],
         shuffle=False,
         num_workers=0,
         drop_last=False,
@@ -185,7 +184,14 @@ def build_svcd_eval_dataset(C):
     ))
 
     from data.svcd import SVCDDataset
-    return build_eval_dataloader(SVCDDataset, configs)
+    return paddle.io.DataLoader(
+        SVCDDataset(**configs),
+        batch_size=C['batch_size'],
+        shuffle=False,
+        num_workers=C['num_workers'],
+        drop_last=False,
+        return_list=True
+    )
 
 
 @DATA.register_func('LEVIRCD_train_dataset')
@@ -213,7 +219,14 @@ def build_levircd_eval_dataset(C):
     ))
 
     from data.levircd import LEVIRCDDataset
-    return build_eval_dataloader(LEVIRCDDataset, configs)
+    return paddle.io.DataLoader(
+        LEVIRCDDataset(**configs),
+        batch_size=C['batch_size'],
+        shuffle=False,
+        num_workers=C['num_workers'],
+        drop_last=False,
+        return_list=True
+    )
 
 
 @DATA.register_func('WHU_train_dataset')
@@ -241,4 +254,11 @@ def build_whu_eval_dataset(C):
     ))
 
     from data.whu import WHUDataset
-    return build_eval_dataloader(WHUDataset, configs)
+    return paddle.io.DataLoader(
+        WHUDataset(**configs),
+        batch_size=C['batch_size'],
+        shuffle=False,
+        num_workers=C['num_workers'],
+        drop_last=False,
+        return_list=True
+    )
