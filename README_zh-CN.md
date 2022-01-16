@@ -109,6 +109,21 @@ Synthetic images and real season-varying remote sensing images | `SVCD` | [googl
 WHU building change detection dataset | `WHU` | [website](http://study.rsgis.whu.edu.cn/pages/download/building_dataset.html)
 LEVIR building change detection dataset | `LEVIRCD` | [website](https://justchenhao.github.io/LEVIR/)
 
+## SVCD 数据集上测试结果
+
+Model | Precision | Recall | F1 | OA
+:-:|:-:|:-:|:-:|:-:
+CDNet | 93.21 | 87.72 | 90.39 | 97.70
+FC-EF | 94.14 | 88.78 | 91.38 | 97.93
+FC-Siam-conc | 95.40 | 92.06 | 93.70 | 98.47
+FC-Siam-diff | 95.74 | 92.80 | 94.24 | 98.60
+STANet | 90.07 | 97.91 | 93.82 | 98.41
+DSIFN | 97.31 | 95.32 | 96.31 | 99.10
+SNUNet | 97.76 | 97.22 | 97.49 | 99.38
+BIT | 96.71 | 95.09 | 95.90 | 99.00
+L-UNet | 96.83 | 95.54 | 96.18 | 99.06
+DSAMNet | 91.65 | 98.37 | 94.89 | 98.69
+
 ## 开发指南
 
 请参见 `docs/` 目录中的内容。
