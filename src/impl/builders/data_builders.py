@@ -146,7 +146,7 @@ def build_oscd_eval_dataset(C):
     from data.oscd import OSCDDataset
     return io.DataLoader(
         OSCDDataset(**configs),
-        batch_size=C['batch_size'],
+        batch_size=1,
         shuffle=False,
         num_workers=0,
         drop_last=False,
