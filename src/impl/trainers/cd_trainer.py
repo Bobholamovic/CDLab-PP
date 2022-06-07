@@ -111,7 +111,7 @@ class CDTrainer(Trainer):
                     for key, feats in out_dict.items():
                         for idx, feat in enumerate(feats):
                             feat = self._process_fetched_feat(feat)
-                            self.vdl_writer.add_image(f"Train/{key}_{idx}", feat, self.train_step)
+                            self.vdl_writer.add_image(f"Train/{key}_{idx}", feat, self.train_step, dataformats='HWC')
                     self.vdl_writer.flush()
                 self.train_step += 1
         
@@ -180,7 +180,7 @@ class CDTrainer(Trainer):
                             for key, feats in out_dict.items():
                                 for idx, feat in enumerate(feats):
                                     feat = self._process_fetched_feat(feat[j])
-                                    self.vdl_writer.add_image(f"Eval/{key}_{idx}", feat, self.eval_step)
+                                    self.vdl_writer.add_image(f"Eval/{key}_{idx}", feat, self.eval_step, dataformats='HWC')
                             self.eval_step += 1
                     else:
                         self.eval_step += batch_size
